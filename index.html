@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Simples</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eaeaea;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculadora {
+      background: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input[type="number"], select, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .resultado {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-radius: 6px;
+      font-weight: bold;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculadora">
+    <h2>Calculadora Simples</h2>
+    <input type="number" id="num1" placeholder="Primeiro número">
+    <input type="number" id="num2" placeholder="Segundo número">
+    <select id="operacao">
+      <option value="somar">Somar</option>
+      <option value="subtrair">Subtrair</option>
+      <option value="multiplicar">Multiplicar</option>
+      <option value="dividir">Dividir</option>
+    </select>
+    <button onclick="calculadora.executar()">Calcular</button>
+    <div class="resultado" id="resultado">Resultado aparecerá aqui</div>
+  </div>
+
+  <script>
+    class Operacoes {
+      somar(a, b) { return a + b; }
+      subtrair(a, b) { return a - b; }
+      multiplicar(a, b) { return a * b; }
+      dividir(a, b) {
+        if (b === 0) throw new Error("Erro: Divisão por zero.");
+        return a / b;
+      }
+    }
+
+    class Calculadora {
+      constructor() {
+        this.operacoes = new Operacoes();
+      }
+
+      lerEntradas() {
+        const a = parseFloat(document.getElementById('num1').value);
+        const b = parseFloat(document.getElementById('num2').value);
+        const operacao = document.getElementById('operacao').value;
+        return { a, b, operacao };
+      }
+
+      validarEntradas(a, b) {
+        if (isNaN(a) || isNaN(b)) {
+          throw new Error("Por favor, insira números válidos.");
+        }
+      }
+
+      mostrarResultado(texto) {
+        document.getElementById('resultado').textContent = texto;
+      }
+
+      executar() {
+        try {
+          const { a, b, operacao } = this.lerEntradas();
+          this.validarEntradas(a, b);
+
+          let resultado;
+          switch (operacao) {
+            case 'somar': resultado = this.operacoes.somar(a, b); break;
+            case 'subtrair': resultado = this.operacoes.subtrair(a, b); break;
+            case 'multiplicar': resultado = this.operacoes.multiplicar(a, b); break;
+            case 'dividir': resultado = this.operacoes.dividir(a, b); break;
+            default: throw new Error("Operação inválida.");
+          }
+
+          this.mostrarResultado(`Resultado: ${resultado}`);
+        } catch (error) {
+          this.mostrarResultado(error.message);
+        }
+      }
+    }
+
+    const calculadora = new Calculadora();
+  </script>
+</body>
+</html>
