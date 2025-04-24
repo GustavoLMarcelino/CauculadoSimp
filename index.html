@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora Simples</title>
   <style>
+    /* Estilização da página */
     body {
       font-family: Arial, sans-serif;
       background-color: #eaeaea;
@@ -15,6 +16,7 @@
       margin: 0;
     }
 
+    /* Estilo do bloco da calculadora */
     .calculadora {
       background: #ffffff;
       padding: 30px 40px;
@@ -24,11 +26,7 @@
       width: 300px;
     }
 
-    h2 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
+    /* Títulos, campos e botão */
     input[type="number"], select, button {
       display: block;
       width: 100%;
@@ -65,34 +63,46 @@
 <body>
   <div class="calculadora">
     <h2>Calculadora Simples</h2>
+    <!-- Campos de entrada -->
     <input type="number" id="num1" placeholder="Primeiro número">
     <input type="number" id="num2" placeholder="Segundo número">
+
+    <!-- Seletor de operação -->
     <select id="operacao">
       <option value="somar">Somar</option>
       <option value="subtrair">Subtrair</option>
       <option value="multiplicar">Multiplicar</option>
       <option value="dividir">Dividir</option>
     </select>
+
+    <!-- Botão de ação -->
     <button onclick="calculadora.executar()">Calcular</button>
+
+    <!-- Resultado exibido aqui -->
     <div class="resultado" id="resultado">Resultado aparecerá aqui</div>
   </div>
 
   <script>
+    // Classe com as operações básicas
     class Operacoes {
       somar(a, b) { return a + b; }
       subtrair(a, b) { return a - b; }
       multiplicar(a, b) { return a * b; }
+
+      // Tratamento para divisão por zero
       dividir(a, b) {
         if (b === 0) throw new Error("Erro: Divisão por zero.");
         return a / b;
       }
     }
 
+    // Classe principal da calculadora
     class Calculadora {
       constructor() {
-        this.operacoes = new Operacoes();
+        this.operacoes = new Operacoes(); // instanciando as operações
       }
 
+      // Lê os dados da interface
       lerEntradas() {
         const a = parseFloat(document.getElementById('num1').value);
         const b = parseFloat(document.getElementById('num2').value);
@@ -100,22 +110,27 @@
         return { a, b, operacao };
       }
 
+      // Verifica se os números são válidos
       validarEntradas(a, b) {
         if (isNaN(a) || isNaN(b)) {
           throw new Error("Por favor, insira números válidos.");
         }
       }
 
+      // Mostra o resultado ou erro na tela
       mostrarResultado(texto) {
         document.getElementById('resultado').textContent = texto;
       }
 
+      // Executa a operação escolhida
       executar() {
         try {
           const { a, b, operacao } = this.lerEntradas();
           this.validarEntradas(a, b);
 
           let resultado;
+
+          // Switch (controle de fluxo) para operações
           switch (operacao) {
             case 'somar': resultado = this.operacoes.somar(a, b); break;
             case 'subtrair': resultado = this.operacoes.subtrair(a, b); break;
@@ -126,11 +141,12 @@
 
           this.mostrarResultado(`Resultado: ${resultado}`);
         } catch (error) {
-          this.mostrarResultado(error.message);
+          this.mostrarResultado(error.message); // Exibe erro
         }
       }
     }
 
+    // Instancia e ativa a calculadora
     const calculadora = new Calculadora();
   </script>
 </body>
